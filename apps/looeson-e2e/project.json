@@ -1,0 +1,29 @@
+{
+  "root": "apps/looeson-e2e",
+  "sourceRoot": "apps/looeson-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/looeson-e2e/cypress.json",
+        "devServerTarget": "looeson:serve",
+        "tsConfig": "apps/looeson-e2e/tsconfig.json"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "looeson:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/looeson-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["looeson"]
+}

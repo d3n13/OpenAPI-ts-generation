@@ -1,0 +1,70 @@
+{
+  "root": "apps/looeson",
+  "sourceRoot": "apps/looeson/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/looeson",
+        "index": "apps/looeson/src/index.html",
+        "baseHref": "/",
+        "main": "apps/looeson/src/main.tsx",
+        "polyfills": "apps/looeson/src/polyfills.ts",
+        "tsConfig": "apps/looeson/tsconfig.app.json",
+        "assets": ["apps/looeson/src/favicon.ico", "apps/looeson/src/assets"],
+        "styles": ["apps/looeson/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/looeson/src/environments/environment.ts",
+              "with": "apps/looeson/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "looeson:build",
+        "hmr": true,
+        "proxyConfig": "apps/looeson/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "looeson:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/looeson/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/looeson"],
+      "options": {
+        "jestConfig": "apps/looeson/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
