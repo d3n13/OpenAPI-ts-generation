@@ -51,7 +51,12 @@ export const EditTodo = ({
   return (
     <form onSubmit={onEdit}>
       <fieldset disabled={disabled}>
-        <input type="text" value={editedTodo?.title} onChange={onChangeTitle} />
+        <input
+          type="text"
+          value={editedTodo?.title}
+          onChange={onChangeTitle}
+          required
+        />
         <br />
 
         <input
