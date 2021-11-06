@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { urlencoded, json } from 'body-parser';
 import { serve, setup } from 'swagger-ui-express';
 import { RegisterRoutes } from './generated/routes/routes';
@@ -12,7 +12,10 @@ app.use(json());
 
 app.use('/api-docs', serve, setup(swaggerDocument));
 
-RegisterRoutes(app);
+const apiRouter = Router();
+RegisterRoutes(apiRouter);
+
+app.use('/api', apiRouter);
 
 app.use(errorHandler);
 
