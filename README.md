@@ -91,13 +91,13 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 
 ## Generators
 
-## Swagger api docs
+### Swagger api docs
 
 Run `yarn generate-api-spec` to generate swagger api docs.
 <br />
 Use after updating api
 
-## Api routes
+### Api routes
 
 Run `yarn generate-api-routes` to generate api routes.
 <br />
