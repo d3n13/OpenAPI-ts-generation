@@ -1,8 +1,8 @@
 import express from 'express';
 import { urlencoded, json } from 'body-parser';
+import { serve, setup } from 'swagger-ui-express';
 import { RegisterRoutes } from './generated/routes/routes';
 import swaggerDocument from './generated/spec/swagger.json';
-import { serve, setup } from 'swagger-ui-express';
 import { errorHandler } from './app/middleware/errorHandler';
 
 const app = express();
