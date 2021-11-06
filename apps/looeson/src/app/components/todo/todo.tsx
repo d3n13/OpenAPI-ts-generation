@@ -1,5 +1,6 @@
 import { Service, Todo as ITodo } from '@dooexid/api-client';
-import { ChangeEventHandler, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { EditTodo } from '../edit-todo/edit-todo';
 
 type Props = {
   item: ITodo;
@@ -16,16 +17,12 @@ enum Mode {
 export function Todo({ item, onDeleted, onEdited }: Props) {
   const id = `${item?._id}`;
 
-  const [editedTodo, setEditedTodo] = useState(item);
   const [mode, setMode] = useState<Mode>(Mode.View);
   const [deleting, setDeleting] = useState(false);
   const [editing, setEditing] = useState(false);
 
   const onSwitchModeToView = useCallback(() => setMode(Mode.View), []);
-  const onSwitchModeToEdit = useCallback(() => {
-    setEditedTodo(item);
-    setMode(Mode.Edit);
-  }, [item]);
+  const onSwitchModeToEdit = useCallback(() => setMode(Mode.Edit), [item]);
   const onSwitchModeToDelete = useCallback(() => setMode(Mode.Delete), []);
 
   const onDelete = useCallback(() => {
@@ -36,32 +33,18 @@ export function Todo({ item, onDeleted, onEdited }: Props) {
       .finally(() => setDeleting(false));
   }, [onDeleted, id]);
 
-  const onEdit = useCallback(() => {
-    setEditing(true);
-    const { _id, ...update } = editedTodo;
-    Service.patch(id, update)
-      .then((update) => !!update && onEdited(update))
-      .catch((e) => alert(`Error while editing item ${id}: ${e}`))
-      .finally(() => {
-        setEditing(false);
-        setMode(Mode.View);
-      });
-  }, [onEdited, editedTodo, id]);
-
-  const onChangeDone: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      const checked = e.target.checked;
-      setEditedTodo((old) => ({ ...old, done: checked }));
+  const onEdit = useCallback(
+    (item: ITodo) => {
+      setEditing(true);
+      Service.patch(id, item)
+        .then((update) => !!update && onEdited(update))
+        .catch((e) => alert(`Error while editing item ${id}: ${e}`))
+        .finally(() => {
+          setEditing(false);
+          setMode(Mode.View);
+        });
     },
-    []
-  );
-
-  const onChangeTitle: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setEditedTodo((old) => ({ ...old, title: value }));
-    },
-    []
+    [onEdited, id]
   );
 
   if (mode === Mode.Delete) {
@@ -78,32 +61,14 @@ export function Todo({ item, onDeleted, onEdited }: Props) {
     );
   }
 
-  const doneInputId = `done_${id}`;
-
   if (mode === Mode.Edit) {
     return (
-      <form onSubmit={onEdit}>
-        <fieldset disabled={editing}>
-          <input
-            type="text"
-            value={editedTodo?.title}
-            onChange={onChangeTitle}
-          />
-          <br />
-
-          <input
-            type="checkbox"
-            checked={editedTodo?.done}
-            onChange={onChangeDone}
-            id={doneInputId}
-          />
-          <label htmlFor={doneInputId}>Done</label>
-          <br />
-
-          <button onClick={onEdit}>Update</button>
-          <button onClick={onSwitchModeToView}>Cancel</button>
-        </fieldset>
-      </form>
+      <EditTodo
+        item={item}
+        onSave={onEdit}
+        onCancel={onSwitchModeToView}
+        disabled={editing}
+      />
     );
   }
 

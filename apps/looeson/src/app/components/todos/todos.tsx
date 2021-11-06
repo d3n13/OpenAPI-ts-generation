@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Service, Todo as ITodo } from '@dooexid/api-client';
 import { Todo } from '../todo/todo';
+import { EditTodo } from '../edit-todo/edit-todo';
 
 export const Todos = () => {
+  const [itemsCreated, setItemsCreated] = useState(0);
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [creating, setCreating] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -29,6 +32,17 @@ export const Todos = () => {
     []
   );
 
+  const onCreate = useCallback((item: ITodo) => {
+    setCreating(true);
+    Service.create(item)
+      .then((created) => {
+        setTodos((old) => [...old, created]);
+        setItemsCreated((v) => v + 1);
+      })
+      .catch((e) => alert(`Error while creating: ${e}`))
+      .finally(() => setCreating(false));
+  }, []);
+
   if (error) {
     return <>{error}</>;
   }
@@ -39,6 +53,12 @@ export const Todos = () => {
 
   return (
     <>
+      <EditTodo
+        key={itemsCreated}
+        disabled={creating}
+        onSave={onCreate}
+        saveTitle="Create"
+      />
       {todos.map((todo) => (
         <Todo
           key={todo._id}
