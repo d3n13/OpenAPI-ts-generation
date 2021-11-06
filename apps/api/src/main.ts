@@ -1,9 +1,9 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import { urlencoded, json } from 'body-parser';
 import { RegisterRoutes } from './generated/routes/routes';
 import swaggerDocument from './generated/spec/swagger.json';
 import swaggerUi from 'swagger-ui-express';
-import { extractErrorDTO } from './app/errors/errors';
+import { errorHandler } from './app/middleware/errorHandler';
 
 const app = express();
 
@@ -14,15 +14,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 RegisterRoutes(app);
 
-app.use(function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Response | void {
-  const dto = extractErrorDTO(err);
-  return res.status(dto.status).json(dto);
-});
+app.use(errorHandler);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
