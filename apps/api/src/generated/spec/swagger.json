@@ -6,22 +6,6 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
-      "Todo": {
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "done": {
-            "type": "boolean"
-          }
-        },
-        "required": ["title"],
-        "type": "object",
-        "additionalProperties": false
-      },
       "FieldErrors": {
         "properties": {},
         "type": "object",
@@ -54,6 +38,22 @@
         },
         "required": ["description", "message", "status"],
         "type": "object"
+      },
+      "Todo": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "done": {
+            "type": "boolean"
+          }
+        },
+        "required": ["title"],
+        "type": "object",
+        "additionalProperties": false
       },
       "Pick_Todo.Exclude_keyofTodo._id__": {
         "properties": {
@@ -106,17 +106,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "items": {
-                        "$ref": "#/components/schemas/Todo"
-                      },
-                      "type": "array"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
-                    }
-                  ]
+                  "items": {
+                    "$ref": "#/components/schemas/Todo"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }
@@ -133,14 +136,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/Todo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }
@@ -169,14 +185,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/Todo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }
@@ -202,15 +231,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
+                  "allOf": [
                     {
                       "$ref": "#/components/schemas/Todo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
                     }
                   ],
                   "nullable": true
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }
@@ -246,15 +295,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
+                  "allOf": [
                     {
                       "$ref": "#/components/schemas/Todo"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
                     }
                   ],
                   "nullable": true
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }
@@ -290,14 +359,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/DeletedDTO"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ErrorMessageDTO"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/DeletedDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
                 }
               }
             }

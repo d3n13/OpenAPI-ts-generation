@@ -17,16 +17,6 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-  Todo: {
-    dataType: 'refObject',
-    properties: {
-      _id: { dataType: 'string' },
-      title: { dataType: 'string', required: true },
-      done: { dataType: 'boolean' },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   FieldErrors: {
     dataType: 'refObject',
     properties: {},
@@ -51,6 +41,16 @@ const models: TsoaRoute.Models = {
       },
       validators: {},
     },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  Todo: {
+    dataType: 'refObject',
+    properties: {
+      _id: { dataType: 'string' },
+      title: { dataType: 'string', required: true },
+      done: { dataType: 'boolean' },
+    },
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   'Pick_Todo.Exclude_keyofTodo._id__': {
