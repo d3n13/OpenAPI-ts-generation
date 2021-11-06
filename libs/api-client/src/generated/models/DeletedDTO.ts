@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type DeletedDTO = {
-    id: string;
-}
+  id: string;
+};
