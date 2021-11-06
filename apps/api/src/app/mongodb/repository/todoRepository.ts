@@ -5,8 +5,13 @@ import { Repository } from './repository';
 class TodoRepository extends Repository {
   public create = (dto: CreateTodoDTO) => TodoModel.create(dto);
   public getAll = () => TodoModel.find();
-  public remove = (id: string) => TodoModel.findByIdAndDelete(id);
   public getById = (id: string) => TodoModel.findById(id);
+  public edit = (id: string, dto: CreateTodoDTO, overwrite = false) =>
+    TodoModel.findByIdAndUpdate(id, dto, {
+      new: true,
+      overwrite,
+    });
+  public remove = (id: string) => TodoModel.findByIdAndDelete(id);
 }
 
 export const todoRepositoryFactory = async () => {

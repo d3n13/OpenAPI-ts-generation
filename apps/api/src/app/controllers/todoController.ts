@@ -3,8 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  Patch,
   Path,
   Post,
+  Put,
   Route,
   SuccessResponse,
 } from 'tsoa';
@@ -26,6 +28,22 @@ export class UsersController extends Controller {
     @Path() todoId: string
   ): Promise<Todo | ErrorMessageDTO> {
     return await new TodoService().getById(todoId);
+  }
+
+  @Patch('{todoId}')
+  public async patch(
+    @Path() todoId: string,
+    @Body() requestBody: CreateTodoDTO
+  ): Promise<Todo | null | ErrorMessageDTO> {
+    return await new TodoService().patch(todoId, requestBody);
+  }
+
+  @Put('{todoId}')
+  public async replace(
+    @Path() todoId: string,
+    @Body() requestBody: CreateTodoDTO
+  ): Promise<Todo | null | ErrorMessageDTO> {
+    return await new TodoService().replace(todoId, requestBody);
   }
 
   @Delete('{todoId}')

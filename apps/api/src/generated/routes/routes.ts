@@ -53,15 +53,6 @@ const models: TsoaRoute.Models = {
     },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  DeletedDTO: {
-    dataType: 'refAlias',
-    type: {
-      dataType: 'nestedObjectLiteral',
-      nestedProperties: { id: { dataType: 'string', required: true } },
-      validators: {},
-    },
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   'Pick_Todo.Exclude_keyofTodo._id__': {
     dataType: 'refAlias',
     type: {
@@ -82,6 +73,15 @@ const models: TsoaRoute.Models = {
   CreateTodoDTO: {
     dataType: 'refAlias',
     type: { ref: 'Omit_Todo._id_', validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  DeletedDTO: {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'nestedObjectLiteral',
+      nestedProperties: { id: { dataType: 'string', required: true } },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -141,6 +141,82 @@ export function RegisterRoutes(app: express.Router) {
         const controller = new UsersController();
 
         const promise = controller.getById.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.patch(
+    '/todos/:todoId',
+
+    function UsersController_patch(request: any, response: any, next: any) {
+      const args = {
+        todoId: {
+          in: 'path',
+          name: 'todoId',
+          required: true,
+          dataType: 'string',
+        },
+        requestBody: {
+          in: 'body',
+          name: 'requestBody',
+          required: true,
+          ref: 'CreateTodoDTO',
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new UsersController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.put(
+    '/todos/:todoId',
+
+    function UsersController_replace(request: any, response: any, next: any) {
+      const args = {
+        todoId: {
+          in: 'path',
+          name: 'todoId',
+          required: true,
+          dataType: 'string',
+        },
+        requestBody: {
+          in: 'body',
+          name: 'requestBody',
+          required: true,
+          ref: 'CreateTodoDTO',
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new UsersController();
+
+        const promise = controller.replace.apply(
           controller,
           validatedArgs as any
         );

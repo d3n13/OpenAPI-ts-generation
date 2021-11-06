@@ -10,6 +10,22 @@ export class TodoService {
     return await repo.create(dto);
   };
 
+  public patch = async (
+    id: string,
+    dto: CreateTodoDTO
+  ): Promise<Todo | null> => {
+    const repo = await todoRepositoryFactory();
+    return await repo.edit(id, dto, false);
+  };
+
+  public replace = async (
+    id: string,
+    dto: CreateTodoDTO
+  ): Promise<Todo | null> => {
+    const repo = await todoRepositoryFactory();
+    return await repo.edit(id, dto, true);
+  };
+
   public delete = async (id: string): Promise<DeletedDTO> => {
     const repo = await todoRepositoryFactory();
     await repo.remove(id);
