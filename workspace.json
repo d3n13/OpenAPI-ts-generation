@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "api-client": "libs/api-client",
     "api-interfaces": "libs/api-interfaces",
     "looeson": "apps/looeson",
     "looeson-e2e": "apps/looeson-e2e"

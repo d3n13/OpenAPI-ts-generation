@@ -102,3 +102,9 @@ Use after updating api
 Run `yarn generate-api-routes` to generate api routes.
 <br />
 Use after updating api
+
+### Api client
+
+Run `yarn generate-openapi-client` to generate typed openapi client into `libs/api-client/src/generated`
+<br />
+Use after generating swagger api docs
