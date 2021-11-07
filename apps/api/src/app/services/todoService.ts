@@ -1,8 +1,8 @@
-import { DeletedDTO } from '../DTO/DeletedDTO';
 import { CreateTodoDTO } from '../DTO/TodoDTO';
 import { NotFoundError } from '../errors/errors';
 import { todoRepositoryFactory } from '../mongodb/repository/todoRepository';
 import { Todo } from '../mongodb/models/Todo';
+import { DeletedDTO } from '../DTO/MessageDTO';
 
 export class TodoService {
   public create = async (dto: CreateTodoDTO): Promise<Todo> => {

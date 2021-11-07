@@ -10,29 +10,33 @@ import {
   Response,
   Route,
   SuccessResponse,
+  Tags,
 } from 'tsoa';
-import { DeletedDTO } from '../DTO/DeletedDTO';
-import { ErrorMessageDTO } from '../DTO/ErrorMessageDTO';
+import {
+  BasicErrorMessageDTO,
+  DeletedDTO,
+  ValidationErrorMessageDTO,
+} from '../DTO/MessageDTO';
 import { CreateTodoDTO } from '../DTO/TodoDTO';
 import { Todo } from '../mongodb/models/Todo';
 import { TodoService } from '../services/todoService';
-
-@Response<ErrorMessageDTO>('5XX')
+@Tags('todos')
+@Response<BasicErrorMessageDTO>('5XX')
 @Route('todos')
-export class UsersController extends Controller {
+export class TodosController extends Controller {
   @Get()
   public async getAll(): Promise<Todo[]> {
     return await new TodoService().getAll();
   }
 
-  @Response<ErrorMessageDTO>(404, 'Not Found')
+  @Response<BasicErrorMessageDTO>(404, 'Not Found')
   @Get('{todoId}')
   public async getById(@Path() todoId: string): Promise<Todo> {
     return await new TodoService().getById(todoId);
   }
 
   @Response(204, 'No Content')
-  @Response<ErrorMessageDTO>(422, 'Validation Failed')
+  @Response<ValidationErrorMessageDTO>(422, 'Validation Failed')
   @Patch('{todoId}')
   public async patch(
     @Path() todoId: string,
@@ -42,7 +46,7 @@ export class UsersController extends Controller {
   }
 
   @Response(204, 'No Content')
-  @Response<ErrorMessageDTO>(422, 'Validation Failed')
+  @Response<ValidationErrorMessageDTO>(422, 'Validation Failed')
   @Put('{todoId}')
   public async replace(
     @Path() todoId: string,
@@ -56,7 +60,7 @@ export class UsersController extends Controller {
     return await new TodoService().delete(todoId);
   }
 
-  @Response<ErrorMessageDTO>(422, 'Validation Failed')
+  @Response<ValidationErrorMessageDTO>(422, 'Validation Failed')
   @SuccessResponse('201', 'Created')
   @Post()
   public async create(@Body() requestBody: CreateTodoDTO): Promise<Todo> {

@@ -11,12 +11,27 @@ import {
   TsoaResponse,
 } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UsersController } from './../../app/controllers/todoController';
+import { UsersController } from './../../app/controllers/authController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TodosController } from './../../app/controllers/todoController';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  BasicErrorMessageDTO: {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'nestedObjectLiteral',
+      nestedProperties: {
+        description: { dataType: 'string', required: true },
+        message: { dataType: 'string', required: true },
+        status: { dataType: 'double', required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   FieldErrors: {
     dataType: 'refObject',
     properties: {},
@@ -29,7 +44,7 @@ const models: TsoaRoute.Models = {
     },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  ErrorMessageDTO: {
+  ValidationErrorMessageDTO: {
     dataType: 'refAlias',
     type: {
       dataType: 'nestedObjectLiteral',
@@ -38,6 +53,52 @@ const models: TsoaRoute.Models = {
         description: { dataType: 'string', required: true },
         message: { dataType: 'string', required: true },
         status: { dataType: 'double', required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ErrorMessageDTO: {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'union',
+      subSchemas: [
+        { ref: 'BasicErrorMessageDTO' },
+        { ref: 'ValidationErrorMessageDTO' },
+      ],
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  'Pick_User.Exclude_keyofUser._id-or-password__': {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'nestedObjectLiteral',
+      nestedProperties: { email: { dataType: 'string', required: true } },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  'Omit_User._id-or-password_': {
+    dataType: 'refAlias',
+    type: {
+      ref: 'Pick_User.Exclude_keyofUser._id-or-password__',
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  StrippedUserDTO: {
+    dataType: 'refAlias',
+    type: { ref: 'Omit_User._id-or-password_', validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  CreateUserDTO: {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'nestedObjectLiteral',
+      nestedProperties: {
+        password: { dataType: 'string', required: true },
+        email: { dataType: 'string', required: true },
       },
       validators: {},
     },
@@ -94,11 +155,18 @@ export function RegisterRoutes(app: express.Router) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
-  app.get(
-    '/todos',
+  app.post(
+    '/auth/register',
 
-    function UsersController_getAll(request: any, response: any, next: any) {
-      const args = {};
+    function UsersController_register(request: any, response: any, next: any) {
+      const args = {
+        requestBody: {
+          in: 'body',
+          name: 'requestBody',
+          required: true,
+          ref: 'CreateUserDTO',
+        },
+      };
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
@@ -107,6 +175,63 @@ export function RegisterRoutes(app: express.Router) {
         validatedArgs = getValidatedArgs(args, request, response);
 
         const controller = new UsersController();
+
+        const promise = controller.register.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    '/auth/login',
+
+    function UsersController_login(request: any, response: any, next: any) {
+      const args = {
+        requestBody: {
+          in: 'body',
+          name: 'requestBody',
+          required: true,
+          ref: 'CreateUserDTO',
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new UsersController();
+
+        const promise = controller.login.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    '/todos',
+
+    function TodosController_getAll(request: any, response: any, next: any) {
+      const args = {};
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TodosController();
 
         const promise = controller.getAll.apply(
           controller,
@@ -122,7 +247,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     '/todos/:todoId',
 
-    function UsersController_getById(request: any, response: any, next: any) {
+    function TodosController_getById(request: any, response: any, next: any) {
       const args = {
         todoId: {
           in: 'path',
@@ -138,7 +263,7 @@ export function RegisterRoutes(app: express.Router) {
       try {
         validatedArgs = getValidatedArgs(args, request, response);
 
-        const controller = new UsersController();
+        const controller = new TodosController();
 
         const promise = controller.getById.apply(
           controller,
@@ -154,7 +279,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     '/todos/:todoId',
 
-    function UsersController_patch(request: any, response: any, next: any) {
+    function TodosController_patch(request: any, response: any, next: any) {
       const args = {
         todoId: {
           in: 'path',
@@ -176,7 +301,7 @@ export function RegisterRoutes(app: express.Router) {
       try {
         validatedArgs = getValidatedArgs(args, request, response);
 
-        const controller = new UsersController();
+        const controller = new TodosController();
 
         const promise = controller.patch.apply(
           controller,
@@ -192,7 +317,7 @@ export function RegisterRoutes(app: express.Router) {
   app.put(
     '/todos/:todoId',
 
-    function UsersController_replace(request: any, response: any, next: any) {
+    function TodosController_replace(request: any, response: any, next: any) {
       const args = {
         todoId: {
           in: 'path',
@@ -214,7 +339,7 @@ export function RegisterRoutes(app: express.Router) {
       try {
         validatedArgs = getValidatedArgs(args, request, response);
 
-        const controller = new UsersController();
+        const controller = new TodosController();
 
         const promise = controller.replace.apply(
           controller,
@@ -230,7 +355,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     '/todos/:todoId',
 
-    function UsersController_remove(request: any, response: any, next: any) {
+    function TodosController_remove(request: any, response: any, next: any) {
       const args = {
         todoId: {
           in: 'path',
@@ -246,7 +371,7 @@ export function RegisterRoutes(app: express.Router) {
       try {
         validatedArgs = getValidatedArgs(args, request, response);
 
-        const controller = new UsersController();
+        const controller = new TodosController();
 
         const promise = controller.remove.apply(
           controller,
@@ -262,7 +387,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     '/todos',
 
-    function UsersController_create(request: any, response: any, next: any) {
+    function TodosController_create(request: any, response: any, next: any) {
       const args = {
         requestBody: {
           in: 'body',
@@ -278,7 +403,7 @@ export function RegisterRoutes(app: express.Router) {
       try {
         validatedArgs = getValidatedArgs(args, request, response);
 
-        const controller = new UsersController();
+        const controller = new TodosController();
 
         const promise = controller.create.apply(
           controller,

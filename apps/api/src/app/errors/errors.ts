@@ -1,5 +1,8 @@
 import { ValidateError } from 'tsoa';
-import { ErrorMessageDTO } from '../DTO/ErrorMessageDTO';
+import {
+  BasicErrorMessageDTO,
+  ValidationErrorMessageDTO,
+} from '../DTO/MessageDTO';
 
 export class NotFoundError extends Error {
   constructor(message: string) {
@@ -8,9 +11,26 @@ export class NotFoundError extends Error {
   }
 }
 
+export class InvalidCredentialsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidCredentialsError';
+  }
+}
+
 const isMongoError = (error: any) => error?.name === 'MongoError';
 
-export const extractErrorDTO = <T extends Error>(e: T): ErrorMessageDTO => {
+export const extractErrorDTO = <T extends Error>(
+  e: T
+): BasicErrorMessageDTO | ValidationErrorMessageDTO => {
+  if (e instanceof InvalidCredentialsError) {
+    return {
+      status: 401,
+      description: e.message,
+      message: 'Invalid Credentials',
+    };
+  }
+
   if (e instanceof NotFoundError) {
     return {
       status: 404,

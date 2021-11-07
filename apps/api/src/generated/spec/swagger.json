@@ -6,6 +6,22 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "BasicErrorMessageDTO": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["description", "message", "status"],
+        "type": "object"
+      },
       "FieldErrors": {
         "properties": {},
         "type": "object",
@@ -20,7 +36,7 @@
           "type": "object"
         }
       },
-      "ErrorMessageDTO": {
+      "ValidationErrorMessageDTO": {
         "properties": {
           "fields": {
             "$ref": "#/components/schemas/FieldErrors"
@@ -37,6 +53,45 @@
           }
         },
         "required": ["description", "message", "status"],
+        "type": "object"
+      },
+      "ErrorMessageDTO": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BasicErrorMessageDTO"
+          },
+          {
+            "$ref": "#/components/schemas/ValidationErrorMessageDTO"
+          }
+        ]
+      },
+      "Pick_User.Exclude_keyofUser._id-or-password__": {
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": ["email"],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "Omit_User._id-or-password_": {
+        "$ref": "#/components/schemas/Pick_User.Exclude_keyofUser._id-or-password__",
+        "description": "Construct a type with the properties of T except for those in type K."
+      },
+      "StrippedUserDTO": {
+        "$ref": "#/components/schemas/Omit_User._id-or-password_"
+      },
+      "CreateUserDTO": {
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": ["password", "email"],
         "type": "object"
       },
       "Todo": {
@@ -97,6 +152,116 @@
   },
   "openapi": "3.0.0",
   "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "Register",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StrippedUserDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDTO"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StrippedUserDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorMessageDTO"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDTO"
+              }
+            }
+          }
+        }
+      }
+    },
     "/todos": {
       "get": {
         "operationId": "GetAll",
@@ -119,12 +284,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": []
       },
@@ -146,7 +312,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/ValidationErrorMessageDTO"
                 }
               }
             }
@@ -156,12 +322,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": [],
         "requestBody": {
@@ -195,7 +362,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
@@ -205,12 +372,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": [
           {
@@ -249,7 +417,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/ValidationErrorMessageDTO"
                 }
               }
             }
@@ -259,12 +427,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": [
           {
@@ -313,7 +482,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/ValidationErrorMessageDTO"
                 }
               }
             }
@@ -323,12 +492,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": [
           {
@@ -369,12 +539,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDTO"
+                  "$ref": "#/components/schemas/BasicErrorMessageDTO"
                 }
               }
             }
           }
         },
+        "tags": ["todos"],
         "security": [],
         "parameters": [
           {
